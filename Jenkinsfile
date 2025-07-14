@@ -15,6 +15,8 @@ pipeline {
         NEXUS_GRP_REPO = "vpro-maven-group"
         NEXUSIP = "192.168.57.13"
         NEXUSPORT = "8081"
+        SONARSERVER = "SonarServer"
+        SONARSCANNER = "SonarScanner"
         NEXUS_PROTOCOL = "http"
     }
 
@@ -30,6 +32,26 @@ pipeline {
                 }
             }
         }
+         stage('SonarQube analysis') {
+            environment {
+                scannerHome = tool("${SONARSCANNER}")
+            }
+            steps{
+                withSonarQubeEnv("SonarScanner") {
+                    sh '''${scannerHome}/bin/sonar-scanner \
+                        -Dsonar.projectKey=vprofile \
+                        -Dsonar.projectName=Vprofile \
+                        -Dsonar.projectVersion=1.0 \
+                        -Dsonar.sources=src/ \
+                        -Dsonar.java.binaries=target/test-classes/com/visualpathit/account/controllerTest/ \
+                        -Dsonar.junit.reportPaths=target/surefire-reports/ \
+                        -Dsonar.jacoco.reportPaths=target/jacoco.exec \
+                        -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml
+                    '''
+                }
+            }
+        }
+  }
         stage("Test"){
             steps{
                 sh 'mvn test'
