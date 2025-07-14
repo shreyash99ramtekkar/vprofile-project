@@ -1,3 +1,9 @@
+COLOR_MAP = [
+    SUCCESS: '#00FF00',
+    UNSTABLE: '#FFFF00',
+    FAILURE: '#FF0000',
+    ABORTED: '#FFA500'
+]
 pipeline {
     agent any
     
@@ -90,8 +96,9 @@ pipeline {
             post{
                 always {
                     echo "Slack Notification: Deployed to Nexus Snapshot Repository"
-                    slackSend channel: '#vprofile-app-cicd'
-
+                    slackSend channel: '#vprofile-app-cicd',
+                    color: COLOR_MAP[currentBuild.currentResult],
+                    message: "*${currentBuild.currentResult}* - Job: `${env.JOB_NAME}` - Build: `${env.BUILD_NUMBER}` - Build Info: `${env.BUILD_URL}`"
                 }
             }
         }
