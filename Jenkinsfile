@@ -49,7 +49,7 @@ pipeline {
             }
             steps{
                 withSonarQubeEnv("${SONARSERVER}") {
-                    sh '''${scannerHome}/bin/sonar-scanner \
+                    sh """${scannerHome}/bin/sonar-scanner \
                         -Dsonar.projectKey=${PROJECT_NAME} \
                         -Dsonar.projectName=${PROJECT_NAME} \
                         -Dsonar.projectVersion=1.0 \
@@ -58,7 +58,7 @@ pipeline {
                         -Dsonar.junit.reportPaths=target/surefire-reports/ \
                         -Dsonar.jacoco.reportPaths=target/jacoco.exec \
                         -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml
-                    '''
+                    """
                 }
             }
         }
