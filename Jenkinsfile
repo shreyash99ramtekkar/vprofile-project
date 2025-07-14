@@ -4,7 +4,6 @@ pipeline {
     tools {
         jdk "OracleJDK17"    
         maven "Maven 3.9.10"
-        sonarScanner "SonarScanner"
     }
     
     environment {
