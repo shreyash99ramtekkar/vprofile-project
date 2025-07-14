@@ -4,6 +4,7 @@ pipeline {
     tools {
         jdk "OracleJDK17"    
         maven "Maven 3.9.10"
+        sonarScanner "SonarScanner"
     }
     
     environment {
@@ -31,12 +32,22 @@ pipeline {
                 }
             }
         }
+        stage ('CODE ANALYSIS WITH CHECKSTYLE'){
+            steps {
+                sh 'mvn checkstyle:checkstyle'
+            }
+            post {
+                success {
+                    echo 'Generated Analysis Result'
+                }
+            }
+        }
         stage('SonarQube analysis') {
             environment {
                 scannerHome = tool("${SONARSCANNER}")
             }
             steps{
-                withSonarQubeEnv("SonarScanner") {
+                withSonarQubeEnv("${SONARSERVER}") {
                     sh '''${scannerHome}/bin/sonar-scanner \
                         -Dsonar.projectKey=vprofile \
                         -Dsonar.projectName=Vprofile \
