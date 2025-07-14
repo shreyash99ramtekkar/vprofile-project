@@ -19,7 +19,6 @@ pipeline {
         SONARSCANNER = "SonarScanner"
         NEXUS_PROTOCOL = "http"
     }
-
     stages{
         stage('BUILD'){
             steps {
@@ -32,7 +31,7 @@ pipeline {
                 }
             }
         }
-         stage('SonarQube analysis') {
+        stage('SonarQube analysis') {
             environment {
                 scannerHome = tool("${SONARSCANNER}")
             }
@@ -51,7 +50,7 @@ pipeline {
                 }
             }
         }
-  }
+    
         stage("Test"){
             steps{
                 sh 'mvn test'
@@ -64,3 +63,4 @@ pipeline {
         }
     }
 }
+
