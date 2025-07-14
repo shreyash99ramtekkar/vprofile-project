@@ -80,7 +80,7 @@ pipeline {
                     repository: "${RELEASE_REPO}",
                     credentialsId: "${NEXUSLOGIN}",
                     artifacts: [
-                        [artifactId: ${PROJECT_NAME},
+                        [artifactId: "${PROJECT_NAME}",
                         classifier: '',
                         file: "target/${PROJECT_NAME}-v2.war",
                         type: 'war']
