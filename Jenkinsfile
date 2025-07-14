@@ -70,21 +70,23 @@ pipeline {
             }
         }
         stage("Deploy to Nexus Snapshot"){
-            nexusArtifactUploader(
-                nexusVersion: 'nexus3',
-                protocol: 'http',
-                nexusUrl: "${NEXUSIP}:${NEXUSPORT}",
-                groupId: 'com.vprofile.qa',
-                version: "${env.BUILD_NUMBER}-${env.BUILD_TIMESTAMP}",
-                repository: "${RELEASE_REPO}",
-                credentialsId: "${NEXUSLOGIN}",
-                artifacts: [
-                    [artifactId: ${PROJECT_NAME},
-                    classifier: '',
-                    file: "target/${PROJECT_NAME}-v2.war",
-                    type: 'war']
-                ]
-            )
+            steps{
+                nexusArtifactUploader(
+                    nexusVersion: 'nexus3',
+                    protocol: 'http',
+                    nexusUrl: "${NEXUSIP}:${NEXUSPORT}",
+                    groupId: 'com.vprofile.qa',
+                    version: "${env.BUILD_NUMBER}-${env.BUILD_TIMESTAMP}",
+                    repository: "${RELEASE_REPO}",
+                    credentialsId: "${NEXUSLOGIN}",
+                    artifacts: [
+                        [artifactId: ${PROJECT_NAME},
+                        classifier: '',
+                        file: "target/${PROJECT_NAME}-v2.war",
+                        type: 'war']
+                    ]
+                )
+            }
         }
     
         stage("Test"){
