@@ -87,6 +87,13 @@ pipeline {
                     ]
                 )
             }
+            post{
+                always {
+                    echo "Slack Notification: Deployed to Nexus Snapshot Repository"
+                    slackSend channel: '#vprofile-app-cicd'
+
+                }
+            }
         }
     
         stage("Test"){
