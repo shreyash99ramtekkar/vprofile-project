@@ -9,15 +9,17 @@ pipeline {
     environment {
         SNAP_REPO = "vprofile-snapshot"
         NEXUS_USER = "devops"
-        NEXUS_PASS = "devops123"
+        NEXUS_PASS = "qwerty123"
         RELEASE_REPO = "vprofile-release"
         CENTRAL_REPO = "vprofile-maven-central"
         NEXUS_GRP_REPO = "vpro-maven-group"
         NEXUSIP = "192.168.57.13"
         NEXUSPORT = "8081"
+        NEXUSLOGIN = "nexuslogin"
         SONARSERVER = "SonarServer"
         SONARSCANNER = "SonarScanner"
         NEXUS_PROTOCOL = "http"
+        PROJECT_NAME = "vprofile"
     }
     stages{
         stage('BUILD'){
@@ -48,8 +50,8 @@ pipeline {
             steps{
                 withSonarQubeEnv("${SONARSERVER}") {
                     sh '''${scannerHome}/bin/sonar-scanner \
-                        -Dsonar.projectKey=vprofile \
-                        -Dsonar.projectName=Vprofile \
+                        -Dsonar.projectKey=${PROJECT_NAME} \
+                        -Dsonar.projectName=${PROJECT_NAME} \
                         -Dsonar.projectVersion=1.0 \
                         -Dsonar.sources=src/ \
                         -Dsonar.java.binaries=target/test-classes/com/visualpathit/account/controllerTest/ \
@@ -66,6 +68,23 @@ pipeline {
                     waitForQualityGate abortPipeline: true
                 }
             }
+        }
+        stage("Deploy to Nexus Snapshot"){
+            nexusArtifactUploader(
+                nexusVersion: 'nexus3',
+                protocol: 'http',
+                nexusUrl: "${NEXUSIP}:${NEXUSPORT}",
+                groupId: 'com.vprofile.qa',
+                version: "${env.BUILD_NUMBER}-${env.BUILD_TIMESTAMP}",
+                repository: "${RELEASE_REPO}",
+                credentialsId: "${NEXUSLOGIN}",
+                artifacts: [
+                    [artifactId: ${PROJECT_NAME},
+                    classifier: '',
+                    file: "target/${PROJECT_NAME}-v2.war",
+                    type: 'war']
+                ]
+            )
         }
     
         stage("Test"){
