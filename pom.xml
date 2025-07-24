@@ -298,9 +298,9 @@
     </build>
     <repositories>
       <repository>
-        <id>codeartifact</id>
-        <name>codeartifact</name>
-    <url>https://domainame-accountid.d.codeartifact.regioncode.amazonaws.com/maven/maven-central-store/</url>
+        <id>devops-vprofile-maven-central-store</id>
+        <name>devops-vprofile-maven-central-store</name>
+        <url>https://devops-vprofile-783764615906.d.codeartifact.eu-west-1.amazonaws.com/maven/maven-central-store/</url>  
       </repository>
     </repositories>
 </project>
